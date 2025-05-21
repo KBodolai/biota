@@ -125,7 +125,9 @@ def download(lat, lon, year, large_tile = False, output_dir = os.getcwd(), verbo
 
     # Generate download URL
     url = generateURL(lat, lon, year, large_tile = large_tile)
-    
+    # hack, won't work if large_tile=True
+    large_tile_dir = '/'.join(url.split('/')[:-1])
+
     # Check that output directory exists
     output_dir = os.path.abspath(os.path.expanduser(output_dir))
     assert os.path.isdir(output_dir), "The output directory (%s) does not exist. Create it, then try again."%output_dir
@@ -140,7 +142,11 @@ def download(lat, lon, year, large_tile = False, output_dir = os.getcwd(), verbo
     try:
         ftp = ftplib.FTP('ftp.eorc.jaxa.jp')
         login = ftp.login()
-        cmd = ftp.cwd('/'.join(url.split('/')[3:-1]))
+        if output_dir in ftp.nlst('/'.join(url.split('/')[3:-2])):
+            cmd = ftp.cwd('/'.join(url.split('/')[3:-1]))
+        else:
+            print(f"{large_tile_dir} isn't in the FTP directory, please double check fi there should be any data")
+            return 
     except ftplib.all_errors as e:
         errorcode_string = str(e).split(None, 1)[0]
         raise OSError('Failed to connect to JAXA FTP server with error code %s.'%errorcode_string)
