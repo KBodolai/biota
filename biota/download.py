@@ -126,7 +126,7 @@ def download(lat, lon, year, large_tile = False, output_dir = os.getcwd(), verbo
     # Generate download URL
     url = generateURL(lat, lon, year, large_tile = large_tile)
     # hack, won't work if large_tile=True
-    large_tile_dir = '/'.join(url.split('/')[:-1])
+    large_tile_dir = '/'.join(url.split('/')[3:-1])
 
     # Check that output directory exists
     output_dir = os.path.abspath(os.path.expanduser(output_dir))
