@@ -142,7 +142,7 @@ def download(lat, lon, year, large_tile = False, output_dir = os.getcwd(), verbo
     try:
         ftp = ftplib.FTP('ftp.eorc.jaxa.jp')
         login = ftp.login()
-        if output_dir in ftp.nlst('/'.join(url.split('/')[3:-2])):
+        if large_tile_dir in ftp.nlst('/'.join(url.split('/')[3:-2])):
             cmd = ftp.cwd('/'.join(url.split('/')[3:-1]))
         else:
             print(f"{large_tile_dir} isn't in the FTP directory, please double check fi there should be any data")
